@@ -1,0 +1,68 @@
+<script type="text/ng-template" id="tree_item.html">
+    <tr style="width:100%">
+        <td>
+            <ng-md-icon icon="folder" class="fa" style="fill: black" size="20" ng-click="mctrl.toggleChildren(data)"></ng-md-icon>
+            <td>
+                {{data.name}}
+                <div id="expanded-data" ng-if="data.childrenVisible">
+                    <table class="table table-striped" id="nested-table">
+                        <div ng-repeat="data in data.nodes" ng-include="'tree_item.html'"></div>
+                    </table>
+                </div>
+            </td>
+    </tr>
+</script>
+<div class="dashboard" ng-cloak>
+    <div id="container">
+        <div ng-controller="MonitorController as mctrl">
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="Poster">
+                    <md-content class="md-padding" layout="column" layout-align="center center">
+                        <img src="./img/poster/Slide1.png" width="1300">
+                    </md-content>
+                </md-tab>
+                <md-tab label="Demo">
+                    <md-content class="md-padding">
+                        <md-card id="recorder" flex="100" layout="column">
+                            <div layout="row">
+                                <md-slider-container flex="90" style="padding-left: 20px">
+                                    <span>Recording Duration(secs)</span>
+                                    <md-slider flex min="0" max="60" ng-model="mctrl.duration" aria-label="blue" id="blue-slider" style="padding-left: 20px" class="md-primary">
+                                    </md-slider>
+                                    <md-input-container>
+                                        <input flex type="number" ng-model="mctrl.duration" aria-label="blue" aria-controls="blue-slider">
+                                    </md-input-container>
+                                </md-slider-container>
+                                <md-button flex="10" ng-click="mctrl.startTimer()">
+                                    <ng-md-icon icon="fiber_manual_record" style="fill: red" size="50"></ng-md-icon>
+                                </md-button>
+                            </div>
+                            <md-progress-linear md-mode="determinate" value="{{mctrl.progressValue}}"></md-progress-linear>
+                        </md-card>
+                        <md-card id="player" flex="100" ng-if="mctrl.vidfile" layout="column" layout-align="center center">
+                            <video width="800" controls>
+                                <source src="{{mctrl.vidfile}}">
+                            </video>
+                        </md-card>
+                        <md-card id="pose-display" style="padding-bottom: 10px">
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">Results</span>
+                                </md-card-title-text>
+                                <md-input-container>
+                            </md-card-title>
+                            <div layout="row">
+                                <div flex="60" layout="column" layout-align="center center">
+                                    <jk-carousel data="dataArray" item-template-url="'monitor/views/item-template.html'" max-width="500" max-height="250" auto-slide="true" auto-slide-time="2000">
+                                    </jk-carousel>
+                                </div>
+                                <div flex="40">
+                                    <bar-chart id="timeline-frame" data="mctrl.bardata"></bar-chart>
+                                </div>
+                            </div>
+                        </md-card>
+                    </md-content>
+                </md-tab>
+        </div>
+    </div>
+</div>
